@@ -149,11 +149,11 @@ def generate_share_token(video_id, expiry_date)
   id = "#{video_id}:#{expiry_date.to_unix()}"
 
   # The info is stored inside the token, and encrypted to make sure other users don't get to see what's inside
-  mac, encrypted_data, nonce = SHARE_TOKEN_KEY.encrypt_detached(id)
+  mac, encrypted_data, nonce = SHARE_TOKEN_KEY.encrypt_detached(id.to_slice, nil)
 
   data = IO::Memory.new()
   data.write(mac)
-  data.write(nonce)
+  data.write(nonce.to_slice)
   data.write(encrypted_data)
 
   return Base64.urlsafe_encode(data)
@@ -175,7 +175,7 @@ def verify_share_token(token, video_id)
   encrypted_token.read(data)
 
   begin
-    decrypted_data = String.new(SHARE_TOKEN_KEY.decrypt_detached(data, nil, nonce=nonce, mac=mac))
+    decrypted_data = String.new(SHARE_TOKEN_KEY.decrypt_detached(data, nil, nonce, mac))
   rescue Sodium::Error::DecryptionFailed
     return false
   end
