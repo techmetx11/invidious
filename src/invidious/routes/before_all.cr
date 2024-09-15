@@ -61,18 +61,6 @@ module Invidious::Routes::BeforeAll
       env.response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
     end
 
-    return if {
-                "/sb/",
-                "/vi/",
-                "/s_p/",
-                "/yts/",
-                "/ggpht/",
-                "/api/manifest/",
-                "/videoplayback",
-                "/latest_version",
-                "/download",
-              }.any? { |r| env.request.resource.starts_with? r }
-
     if env.request.cookies.has_key? "SID"
       sid = env.request.cookies["SID"].value
 
@@ -98,7 +86,31 @@ module Invidious::Routes::BeforeAll
         env.set "csrf_token", csrf_token
         env.set "user", user
       end
+    elsif CONFIG.private_instance
+      is_on_authorized_page = false
+
+      {
+        "/login",
+        "/licenses",
+        "/privacy",
+      }.any? { |u| is_on_authorized_page |= env.request.resource.starts_with? u }
+
+      if !is_on_authorized_page
+        raise InfoException.new("This Invidious instance is private. Please log in to access content")
+      end
     end
+
+    return if {
+                "/sb/",
+                "/vi/",
+                "/s_p/",
+                "/yts/",
+                "/ggpht/",
+                "/api/manifest/",
+                "/videoplayback",
+                "/latest_version",
+                "/download",
+              }.any? { |r| env.request.resource.starts_with? r }
 
     dark_mode = convert_theme(env.params.query["dark_mode"]?) || preferences.dark_mode.to_s
     thin_mode = env.params.query["thin_mode"]? || preferences.thin_mode.to_s

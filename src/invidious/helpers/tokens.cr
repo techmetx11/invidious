@@ -1,4 +1,5 @@
 require "crypto/subtle"
+require "sodium"
 
 def generate_token(email, scopes, expire, key)
   session = "v1:#{Base64.urlsafe_encode(Random::Secure.random_bytes(32))}"
@@ -142,4 +143,19 @@ def scopes_include_scope(scopes, subset)
   end
 
   return false
+end
+
+def generate_share_token(video_id, expiry_date)
+  id = "#{video_id}:#{expiry_date.to_unix()}"
+
+  # The info is stored inside the token, and encrypted to make sure other users don't get to see what's inside
+  mac, encrypted_data, nonce = SHARE_TOKEN_KEY.encrypt_detached(id)
+
+  data = IO::Memory.new()
+  data.write(mac)
+  data.write(nonce)
+  IO::ByteFormat::SystemEndian.encode(encrypted_data.size, data)
+  data.write(encrypted_data)
+
+  return Base64.urlsafe_encode(data)
 end
