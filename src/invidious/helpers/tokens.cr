@@ -154,8 +154,44 @@ def generate_share_token(video_id, expiry_date)
   data = IO::Memory.new()
   data.write(mac)
   data.write(nonce)
-  IO::ByteFormat::SystemEndian.encode(encrypted_data.size, data)
   data.write(encrypted_data)
 
   return Base64.urlsafe_encode(data)
 end
+
+def verify_share_token(token, video_id)
+  begin
+    encrypted_token = IO.new(Base64.decode(token))
+  rescue Base64::Error
+    return false
+  end
+
+  mac = Bytes.new Sodium::Cipher::Aead::XChaCha20Poly1305Ietf.MAC_SIZE
+  nonce = Bytes.new Sodium::Cipher::Aead::XChaCha20Poly1305Ietf.NONCE_SIZE
+  data = Bytes.new
+
+  encrypted_token.read(mac)
+  encrypted_token.read(nonce)
+  encrypted_token.read(data)
+
+  begin
+    decrypted_data = String.new(SHARE_TOKEN_KEY.decrypt_detached(data, nil, nonce=nonce, mac=mac))
+  rescue Sodium::Error::DecryptionFailed
+    return false
+  end
+
+  elements = decrypted_data.split(":")
+
+  if !Crypto::Subtle.constant_time_compare(elements[0], video_id)
+    return false
+  end
+
+  time_now = Time.utc
+
+  if time_now.to_unix > Time.unix(elements[1].to_i)
+    return false
+  end
+
+  return true
+end
+
