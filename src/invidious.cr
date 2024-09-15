@@ -60,7 +60,7 @@ alias IV = Invidious
 CONFIG   = Config.load
 HMAC_KEY = CONFIG.hmac_key
 
-HMAC_KDF = Sodium::Kdf.new(CONFIG.hmac_key.to_slice, false)
+HMAC_KDF = Sodium::Kdf.copy_key_from(CONFIG.hmac_key.to_slice)
 SHARE_TOKEN_KEY = HMAC_KDF.derive_aead_xchacha20poly1305_ietf("shretken", 1)
 
 PG_DB       = DB.open CONFIG.database_url

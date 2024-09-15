@@ -171,7 +171,7 @@ module Invidious::Routing
     get "/embed/", Routes::Embed, :redirect
     get "/embed/:id", Routes::Embed, :show
 
-    post "/share/:id", Routes::Share, :generate_share_link
+    get "/share/:id", Routes::Share, :generate_share_link
   end
 
   def register_yt_playlist_routes
