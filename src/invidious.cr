@@ -60,8 +60,8 @@ alias IV = Invidious
 CONFIG   = Config.load
 HMAC_KEY = CONFIG.hmac_key
 
-HMAC_KDF = Sodium::Kdf.new(CONFIG.hmac_key.bytes, false)
-SHARE_TOKEN_KEY = HMAC_KDF.derive_aead_xchacha20poly1305_ietf("shretken", 1, 32)
+HMAC_KDF = Sodium::Kdf.new(Slice.new(CONFIG.hmac_key.bytesize) {|i| CONFIG.hmac_key.bytes[i]}, false)
+SHARE_TOKEN_KEY = HMAC_KDF.derive_aead_xchacha20poly1305_ietf("shretken", 1)
 
 PG_DB       = DB.open CONFIG.database_url
 ARCHIVE_URL = URI.parse("https://archive.org")
