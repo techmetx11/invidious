@@ -436,17 +436,17 @@ jobs:
 #use_pubsub_feeds: false
 
 ##
-## HMAC signing key used for CSRF tokens, cookies and pubsub
+## HMAC signing key file used for CSRF tokens, cookies and pubsub
 ## subscriptions verification.
 ##
-## Note: This parameter is mandatory and should be a random string.
-## Such random string can be generated on linux with the following
-## command: `pwgen 20 1`
+## Note: This parameter is mandatory and should be a file that
+## contains a series of random bytes. Such file can be generated
+## in Linux with the command: `head -c 32 /dev/random > hmac_key`
 ##
-## Accepted values: a string
+## Accepted values: a filepath
 ## Default: <none>
 ##
-hmac_key: "CHANGE_ME!!"
+hmac_keyfile: "hmac_key"
 
 ##
 ## List of video IDs where the "download" widget must be

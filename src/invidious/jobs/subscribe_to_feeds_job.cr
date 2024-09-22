@@ -1,6 +1,6 @@
 class Invidious::Jobs::SubscribeToFeedsJob < Invidious::Jobs::BaseJob
   private getter db : DB::Database
-  private getter hmac_key : String
+  private getter hmac_key : Bytes
 
   def initialize(@db, @hmac_key)
   end

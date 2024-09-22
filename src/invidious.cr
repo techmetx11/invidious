@@ -58,7 +58,11 @@ end
 alias IV = Invidious
 
 CONFIG   = Config.load
-HMAC_KEY = CONFIG.hmac_key
+HMAC_KEY = Bytes.new File.size(CONFIG.hmac_keyfile)
+
+File.open(CONFIG.hmac_keyfile, "r") do |file|
+  file.read(HMAC_KEY)
+end
 
 PG_DB       = DB.open CONFIG.database_url
 ARCHIVE_URL = URI.parse("https://archive.org")

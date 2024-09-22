@@ -83,7 +83,7 @@ class Config
   # Used to tell Invidious it is behind a proxy, so links to resources should be https://
   property https_only : Bool?
   # HMAC signing key for CSRF tokens and verifying pubsub subscriptions
-  property hmac_key : String = ""
+  property hmac_keyfile : String = ""
   # Domain to be used for links to resources on the site where an absolute URL is required
   property domain : String?
   # Subscribe to channels using PubSubHubbub (requires domain, hmac_key)
@@ -210,11 +210,11 @@ class Config
 
     # HMAC_key is mandatory
     # See: https://github.com/iv-org/invidious/issues/3854
-    if config.hmac_key.empty?
-      puts "Config: 'hmac_key' is required/can't be empty"
+    if config.hmac_keyfile.empty?
+      puts "Config: 'hmac_keyfile' is required/can't be empty"
       exit(1)
-    elsif config.hmac_key == "CHANGE_ME!!"
-      puts "Config: The value of 'hmac_key' needs to be changed!!"
+    elsif !File.exists?(config.hmac_keyfile)
+      puts "Config: The HMAC keyfile does not exist"
       exit(1)
     end
 
