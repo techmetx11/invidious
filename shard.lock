@@ -6,11 +6,15 @@ shards:
 
   athena-negotiation:
     git: https://github.com/athena-framework/negotiation.git
-    version: 0.1.1
+    version: 0.1.5
 
   backtracer:
     git: https://github.com/sija/backtracer.cr.git
-    version: 1.2.1
+    version: 1.2.2
+
+  crypto-secret:
+    git: https://github.com/didactic-drunk/crypto-secret.cr.git
+    version: 0.2.0+git.commit.388f4a3c7fb3c283ea5e99f918ff89e3d98f8626
 
   db:
     git: https://github.com/crystal-lang/crystal-db.git
@@ -28,6 +32,10 @@ shards:
     git: https://github.com/jeromegn/kilt.git
     version: 0.6.1
 
+  mmap:
+    git: https://github.com/crystal-posix/mmap.cr.git
+    version: 0.4.0
+
   pg:
     git: https://github.com/will/crystal-pg.git
     version: 0.24.0
@@ -40,9 +48,13 @@ shards:
     git: https://github.com/luislavena/radix.git
     version: 0.4.1
 
+  sodium:
+    git: https://github.com/techmetx11/sodium.cr.git
+    version: 1.2.3+git.commit.659ed210db6fbac73bc55cf8434974bd6c9cbcc9
+
   spectator:
     git: https://github.com/icy-arctic-fox/spectator.git
-    version: 0.10.4
+    version: 0.10.6
 
   sqlite3:
     git: https://github.com/crystal-lang/crystal-sqlite3.git

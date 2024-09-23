@@ -73,6 +73,11 @@ module Invidious::Routes::BeforeAll
                 "/download",
               }.any? { |r| env.request.resource.starts_with? r }
 
+    if !env.request.cookies.has_key? "pow-vc" || !verify_visit_cookie(env.request.cookies["pow-vc"].value) && env.request.resource != "/pow" && env.request.resource != "/pow/submit"
+      env.response.headers["Location"] = "/pow"
+      haltf env, status_code: 302
+    end
+
     if env.request.cookies.has_key? "SID"
       sid = env.request.cookies["SID"].value
 

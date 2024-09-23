@@ -78,6 +78,9 @@ module Invidious::Routing
     post "/token_ajax", Routes::Account, :token_ajax
     post "/subscription_ajax", Routes::Subscriptions, :toggle_subscription
     get "/subscription_manager", Routes::Subscriptions, :subscription_manager
+
+    get "/pow", Routes::Challenge, :page
+    post "/pow/submit", Routes::Challenge, :verify
   end
 
   def register_iv_playlist_routes

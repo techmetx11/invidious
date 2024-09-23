@@ -16,6 +16,7 @@
 
 require "digest/md5"
 require "file_utils"
+require "sodium"
 
 # Require kemal, kilt, then our own overrides
 require "kemal"
@@ -63,6 +64,8 @@ HMAC_KEY = Bytes.new File.size(CONFIG.hmac_keyfile)
 File.open(CONFIG.hmac_keyfile, "r") do |file|
   file.read(HMAC_KEY)
 end
+
+HMAC_KDF = Sodium::Kdf.copy_key_from HMAC_KEY
 
 PG_DB       = DB.open CONFIG.database_url
 ARCHIVE_URL = URI.parse("https://archive.org")

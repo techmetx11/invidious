@@ -1,0 +1,11 @@
+<% content_for "header" do %>
+<title>Challenge - Invidious</title>
+<script src="js/core.js"></script>
+<script src="js/blake2b.js"></script>
+<script src="js/pow.js"></script>
+<% end %>
+
+<h3>You have to solve a cryptographic puzzle to continue</h3>
+<button id="solve">Click to solve</button>
+
+<label id="challenge" style="display: none;"><%= challenge %></label>

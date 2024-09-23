@@ -28,6 +28,8 @@ dependencies:
   athena-negotiation:
     github: athena-framework/negotiation
     version: ~> 0.1.1
+  sodium:
+    github: techmetx11/sodium.cr
 
 development_dependencies:
   spectator:
